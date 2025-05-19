@@ -1842,6 +1842,7 @@
 #include "code\modules\spells\spell.dm"
 #include "code\modules\spells\roguetown\_roguetown.dm"
 #include "code\modules\spells\roguetown\confessor.dm"
+#include "code\modules\spells\roguetown\deathcounter.dm"
 #include "code\modules\spells\roguetown\jester.dm"
 #include "code\modules\spells\roguetown\necromancer.dm"
 #include "code\modules\spells\roguetown\seelie.dm"

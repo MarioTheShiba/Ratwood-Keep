@@ -99,6 +99,15 @@
 	else
 		ongive(user, params)
 
+/mob/living/ranged_attack_right(mob/user, params)
+		user.changeNext_move(CLICK_CD_MELEE)
+	user.face_atom(src)
+	if(user.cmode)
+		if(user.rmb_intent)
+			user.rmb_intent.special_attack(user, src)
+	else
+		ongive(user, params)
+
 /turf/attack_right(mob/user, params)
 	. = ..()
 	user.changeNext_move(CLICK_CD_MELEE)
@@ -518,6 +527,9 @@
 		. = TRUE
 	if(interaction_flags_atom & INTERACT_ATOM_ATTACK_HAND)
 		. = _try_interact(user)
+
+/atom/proc/ranged_attack_right(mob/user)
+	return
 
 //Return a non FALSE value to cancel whatever called this from propagating, if it respects it.
 /atom/proc/_try_interact(mob/user)
