@@ -140,3 +140,7 @@
 #define SPELL_SUMMON_WEAPON							/obj/effect/proc_holder/spell/targeted/summonweapon
 #define SPELL_MENDING								/obj/effect/proc_holder/spell/invoked/mending
 #define SPELL_REPEL									/obj/effect/proc_holder/spell/invoked/projectile/repel
+#define SPELL_RYUSUI								/obj/effect/proc_holder/spell/self/ryusui
+#define SPELL_RYUSUI_BREATH							/obj/effect/proc_holder/spell/self/ryusui_breath
+#define SPELL_RYUSUI_FLOWINGFIST					/obj/effect/proc_holder/spell/invoked/ryusui_flowingfist
+#define SPELL_RYUSUI_CRUSHINGROCK					/obj/effect/proc_holder/spell/invoked/ryusui_crushingrock
