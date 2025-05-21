@@ -57,6 +57,32 @@
 
 // combat abilities
 
+
+/obj/effect/proc_holder/spell/invoked/ryunecksnap
+	name = "Neck Snap" // Instant kill ability. Don't abuse it, do some interesting RP first!!!
+	desc = "Snaps your opponent's neck. Very painful."
+	human_req = TRUE
+	range = 1
+	miracle = FALSE
+	charge_max = 40 SECONDS
+	invocation = "Heh."
+	invocation = "none"
+	movement_interrupt = FALSE
+
+/obj/effect/proc_holder/spell/invoked/ryunecksnap/cast(list/targets, mob/living/user)
+	if(isliving(targets[1]))
+		var/mob/living/carbon/target = targets[1]
+		var/obj/item/bodypart/BPN = target.get_bodypart(BODY_ZONE_PRECISE_NECK)
+		target.visible_message(span_warningbig("[target] has their neck suddenly snapped with a sickening sound!", span_userdanger("Your vision suddenly darkens, you have trouble breathing...")))
+		playsound(target, 'sound/magic/necksnap.ogg')
+		target.adjustOxyLoss(100)
+		target.apply_damage(rand(70,100), BRUTE, BPN)
+		BPN.add_wound(/datum/wound/dislocation/neck)
+		target.blind_eyes(25)
+		target.blur_eyes(100)
+		return TRUE
+	return FALSE
+
 /obj/effect/proc_holder/spell/invoked/ryuflowfist
 	name = "Flowing Fist" // basic fisting ability, although very strong.
 	desc = "Suddenly strike your enemy's vitals, knocking the air out of them, and dealing damage."
@@ -65,7 +91,7 @@
 	miracle = FALSE
 	charge_max = 25 SECONDS
 	movement_interrupt = FALSE
-	invocation = "Haha!"
+	invocation = list("Haha!","Hmph!")
 	invocation_type = "shout"
 
 
@@ -73,25 +99,26 @@
 	if(isliving(targets[1]))
 		var/mob/living/carbon/target = targets[1]
 		var/obj/item/bodypart/BPC = target.get_bodypart(BODY_ZONE_CHEST)
-		target.visible_message(span_warningbig("[target] is striked by a heavy blow!"), span_userdanger("I feel the air escape my lungs as I am punched in my chest!"))
+		target.visible_message(span_warningbig("[target] is struck by a heavy blow!"), span_userdanger("I feel the air escape my lungs as I am punched in my chest!"))
 		playsound(target, 'sound/magic/bigfist2.ogg', 50)
 		target.apply_damage(rand(15,45), BRUTE, BPC)
-		target.adjustOxyLoss(35)
+		target.adjustOxyLoss(45)
 		target.blind_eyes(1)
 		target.blur_eyes(5)
 		target.Knockdown(5)
-		yeet(target)
-		user.say("Get up, come on!")
+		yeet(target, user)
+		sleep(15)
+		user.say(list("Get up, come on!", "There is no shame in yielding to me.", "Can always back up from this fight."))
 		return TRUE
 	return FALSE
 
 /obj/effect/proc_holder/spell/invoked/ryuflowfist/proc/yeet(mob/living/target, mob/living/user)
-	if(!target || !user || !isliving(target))
+	if(!isliving(target))
 		return
 	var/dir = get_dir(user, target)
 	var/turf/throw_target = get_edge_target_turf(get_turf(target), dir)
 	
-	if (throw_target)
+	if (target)
 		target.throw_at(throw_target, 2, 4)
 
 
@@ -138,6 +165,16 @@
 	addtimer(CALLBACK(src, PROC_REF(disable_ryurock), M), duration)
 	return TRUE
 
+/obj/effect/proc_holder/spell/invoked/ryurock/proc/bigshove(mob/living/target, mob/living/user)
+	if(!isliving(target))
+		return
+	var/dir = get_dir(user, target)
+	var/turf/throw_target = get_edge_target_turf(get_turf(target), dir)
+	
+	if (target)
+		target.throw_at(throw_target, 4, 4)
+
+
 /obj/effect/proc_holder/spell/invoked/ryurock/proc/on_attacked(mob/victim, mob/living/attacker)
 	SIGNAL_HANDLER
 	if (!isliving(attacker))
@@ -147,25 +184,20 @@
 	attacker.Immobilize(1.5 SECONDS) // ouch, you got caught.
 	var/obj/item/bodypart/BPC = attacker.get_bodypart(BODY_ZONE_CHEST)
 	victim.forceMove(target_turf)
-	attacker.visible_message(span_warning("[victim] quickly sidesteps [attacker]'s your attack, however they do get hit by it in the process!"))
+	attacker.visible_message(span_warning("[victim] quickly sidesteps your attack, however they do get hit by it in the process!"))
 	sleep(5)
-	victim.say("Dumbass!")
+	victim.say(list("Dumbass!", "You fell for it!", "Fool!", "Nimrod!"))
 	sleep(10)
 	playsound(victim, 'sound/magic/bigfist1.ogg', 50)
 	attacker.apply_damage(rand(35,75), BRUTE, BPC)
+	attacker.adjustOxyLoss(55)
 	BPC.add_wound(/datum/wound/fracture/chest)
 	attacker.visible_message(span_warningbig("[victim] launches a crushing blow to [attacker]'s your chest, launching you back, a sickening crunch heard!"))
-	yeett(attacker)
+	bigshove(attacker, victim)
 	attacker.Knockdown(15)
-	victim.say("What's wrong, chest feeling heavy?")
+	victim.say(list("What's wrong, chest feeling heavy?", "Having trouble breathing?", "I hope that hurt.", "You should yield, I think!", "You're not looking good."))
 
 
-/obj/effect/proc_holder/spell/invoked/ryurock/proc/yeett(target)
-	if(isliving(target))
-		var/atom/throw_target = get_edge_target_turf(src, get_dir(src, target)) //shoutout radiant for the help
-		var/mob/living/L = target
-		if(L)
-			L.throw_at(throw_target, 5, 4)
 
 
 
