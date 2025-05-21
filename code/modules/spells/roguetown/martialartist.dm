@@ -34,6 +34,7 @@
 
 
 
+
 /obj/effect/proc_holder/spell/self/ryubreath
 	// pretty insane self heal, fickle to balance, i'm keeping it at 30 seconds for now.
 	name = "Steady Breath"
@@ -143,9 +144,6 @@
 		return FALSE
 
 	var/mob/living/M = user
-
-	if (M.anti_magic_check(TRUE, TRUE))
-		return FALSE // we can't counter if they use anti-magic! we are using magic fists.
 
 	if (counter_active)
 		M.show_message(span_warning("Already performing this move."))
